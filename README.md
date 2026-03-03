@@ -1,7 +1,7 @@
 # Engineering Lifecyle Management with watsonx Orchestrate AI Agents
 
 <div style="text-align: center;">
-  ![Alt text](cover-img.jpg)
+  <img src="cover-img.jpg" alt="Alt text" style="display: block; margin: 0 auto;">
 </div>
 
 Ever thought of transforming your engineering lifecycle management with AI?
