@@ -1,6 +1,8 @@
 # Engineering Lifecyle Management with watsonx Orchestrate AI Agents
 
-![alt text](cover-img.jpg)
+<div style="text-align: center;">
+  ![Alt text](cover-img.jpg)
+</div>
 
 Ever thought of transforming your engineering lifecycle management with AI?
 
