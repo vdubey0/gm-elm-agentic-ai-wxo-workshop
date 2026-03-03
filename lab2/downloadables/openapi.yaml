@@ -1,0 +1,137 @@
+openapi: 3.0.3
+info:
+  title: Lab2 tools API
+  description: Performs downstream requirement impact retrieval, conflict extraction, and Slack notifications
+  version: "1.0.0"
+
+servers:
+  - url: https://gm-elm-api-ai-hub-mcp.apps.itz-8zvb25.infra01-lb.dal14.techzone.ibm.com
+    description: eml-gm-bootcamp-lab2-tools
+
+paths:
+  /:
+    get:
+      summary: Health Check
+      operationId: healthCheck
+      description: This tool will check if the service is running and return the status.
+      responses:
+        "200":
+          description: Service status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                example:
+                  status: running
+
+  /impact-retriever:
+    post:
+      summary: Impact Analysis
+      operationId: ImpactRetriever
+      description: This tool will take in requirement ids and identify all downstream requirements and tests that could potential be affected by a changes to these input requirement ids.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ImpactRetrieverRequest"
+      responses:
+        "200":
+          description: Impact analysis result
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "500":
+          description: Internal server error
+
+  /conflict-check:
+    post:
+      summary: Conflict Analysis
+      operationId: ConflictChecker
+      description: This tool will take in the impact analysis result and identify all conflicts between the parent and child requirements.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ConflictRequest"
+      responses:
+        "200":
+          description: Conflict analysis result
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "500":
+          description: Internal server error
+
+  /send-slack-dm:
+    post:
+      summary: Send Slack Direct Message
+      operationId: sendSlackDM
+      description: This tool will take in the conflict analysis result and send a slack message to the affected artifact owners.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SlackDMRequest"
+      responses:
+        "200":
+          description: Slack message response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+        "500":
+          description: Internal server error
+
+components:
+  schemas:
+    ImpactRetrieverRequest:
+      type: object
+      required:
+        - requirement_ids
+      properties:
+        requirement_ids:
+          type: array
+          items:
+            type: string
+          example:
+            - REQ-ADAS-110
+            - REQ-ADAS-111
+        project_name:
+          type: string
+          default: Basic Cruise Control System (Requirements)
+
+    ConflictRequest:
+      type: object
+      required:
+        - impact_result
+      properties:
+        impact_result:
+          type: object
+          additionalProperties: true
+        project_name:
+          type: string
+          default: Basic Cruise Control System (Requirements)
+
+    SlackDMRequest:
+      type: object
+      required:
+        - member_id
+        - text
+      properties:
+        member_id:
+          type: string
+          example: U0AF222SL76
+        text:
+          type: string
+          example: Conflict detected between REQ-ADAS-110 and REQ-ADAS-111
