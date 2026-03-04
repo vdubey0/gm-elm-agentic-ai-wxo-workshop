@@ -181,7 +181,7 @@ This is where we will be defining the process we want the agent to take once it 
     - **Name:** primary_text
     - **Description:** The text of the requirement
 
-    - **Name:** test_script_template*
+    - **Name:** test_script_template
     - **Description:** Get from Test Script Template from knowledget
 
     ![alt text](images/agentic_workflow2.png)
